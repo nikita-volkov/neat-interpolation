@@ -7,7 +7,7 @@ import EZInterpolation.Parsing
 import EZInterpolation.String
 
 main = do
-  let a = [text| 
+  let a' = [text| 
     function startsWith( start, string ){
       return string.lastIndexOf( start ) == 0
     }
@@ -15,14 +15,13 @@ main = do
   let pattern = [text| {
       
 
-      $a
+      $a'
 
-
-      single inlining: ( $a )
+      single inlining: ( $a' )
 
 
       {
-        multiple inlining: ( $a ) ( $a )
+        multiple inlining: ( $a' ) ( $a' )
       }
 
 

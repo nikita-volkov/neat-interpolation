@@ -22,7 +22,8 @@ parseLines = parse lines "EZInterpolation.Parsing.parseLines"
     line = Line <$> countIndent <*> many content
     countIndent = fmap length $ try $ lookAhead $ many $ char ' '
     content = try identifier <|> contentText
-    identifier = fmap LineContentIdentifier $ string "$" *> many1 alphaNum
+    identifier = fmap LineContentIdentifier $ 
+      string "$" *> many1 (alphaNum <|> char '\'' <|> char '_')
     contentText = do
       text <- manyTill anyChar end
       if null text
