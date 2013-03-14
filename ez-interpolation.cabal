@@ -1,0 +1,30 @@
+name:               ez-interpolation
+version:            0.1.0
+cabal-version:      >=1.8
+build-type:         Simple
+license:            MIT
+license-file:       LICENSE
+copyright:          (c) 2013, Nikita Volkov
+author:             Nikita Volkov
+maintainer:         Nikita Volkov <nikita.y.volkov@mail.ru>
+stability:          experimental
+homepage:           https://github.com/nikita-volkov/ez-interpolation
+bug-reports:        https://github.com/nikita-volkov/ez-interpolation/issues
+synopsis:           
+description:        
+category:           Text, String, QuasiQoutes
+
+library
+  hs-source-dirs:   src
+  extensions:       PatternGuards
+  exposed-modules:  EZInterpolation
+  other-modules:    EZInterpolation.Parsing
+                    EZInterpolation.String
+  build-depends:    base >= 4.5 && < 5,
+                    classy-prelude >= 0.5.0,
+                    template-haskell,
+                    parsec
+
+source-repository head
+  type:             git
+  location:         git://github.com/nikita-volkov/ez-interpolation.git
