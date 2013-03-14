@@ -3,6 +3,8 @@
 import Prelude ()
 import ClassyPrelude
 import EZInterpolation
+import EZInterpolation.Parsing
+import EZInterpolation.String
 
 main = do
   let a = [text| 
@@ -10,12 +12,20 @@ main = do
       return string.lastIndexOf( start ) == 0
     }
   |]
-  putStrLn $ [text| {
+  let pattern = [text| {
+      
+
       $a
+
+
       single inlining: ( $a )
+
+
       {
         multiple inlining: ( $a ) ( $a )
       }
-    } 
 
+
+    } 
     |]
+  putStrLn pattern
