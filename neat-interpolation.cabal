@@ -10,8 +10,8 @@ maintainer:         Nikita Volkov <nikita.y.volkov@mail.ru>
 stability:          experimental
 homepage:           https://github.com/nikita-volkov/neat-interpolation
 bug-reports:        https://github.com/nikita-volkov/neat-interpolation/issues
-synopsis:           
-description:        
+synopsis:           A quasiquoter for neat and simple multiline text interpolation
+description:        NeatInterpolation provides a quasiquoter for producing `Text` data with a simple interpolation of input values. It removes the excessive indentation from the input text and accurately manages the indentation of all lines of interpolated variables. 
 category:           Text, String, QuasiQoutes
 
 library
