@@ -1,6 +1,6 @@
 {-# LANGUAGE QuasiQuotes, TemplateHaskell, DeriveDataTypeable, OverloadedStrings #-}
 {-# OPTIONS_GHC -fno-warn-missing-fields #-} 
-module EZInterpolation (text, indentQQPlaceholder) where
+module NeatInterpolation (text, indentQQPlaceholder) where
 
 import Prelude ()
 import ClassyPrelude
@@ -8,8 +8,8 @@ import ClassyPrelude
 import Language.Haskell.TH
 import Language.Haskell.TH.Quote
 
-import EZInterpolation.String
-import EZInterpolation.Parsing
+import NeatInterpolation.String
+import NeatInterpolation.Parsing
 
 
 

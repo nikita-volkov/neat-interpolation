@@ -1,5 +1,5 @@
 {-# LANGUAGE NoMonomorphismRestriction #-}
-module EZInterpolation.Parsing where
+module NeatInterpolation.Parsing where
 
 import Prelude ()
 import ClassyPrelude hiding (try, lines)
@@ -16,7 +16,7 @@ data LineContent =
 
 
 parseLines :: [Char] -> Either ParseError [Line]
-parseLines = parse lines "EZInterpolation.Parsing.parseLines"
+parseLines = parse lines "NeatInterpolation.Parsing.parseLines"
   where
     lines = sepBy line newline <* eof
     line = Line <$> countIndent <*> many content

@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings, NoMonomorphismRestriction #-}
-module EZInterpolation.String where
+module NeatInterpolation.String where
 
 import Prelude ()
 import ClassyPrelude

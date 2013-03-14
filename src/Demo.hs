@@ -2,9 +2,9 @@
 
 import Prelude ()
 import ClassyPrelude
-import EZInterpolation
-import EZInterpolation.Parsing
-import EZInterpolation.String
+import NeatInterpolation
+import NeatInterpolation.Parsing
+import NeatInterpolation.String
 
 main = do
   let a' = [text| 
