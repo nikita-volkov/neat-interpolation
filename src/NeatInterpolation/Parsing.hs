@@ -2,7 +2,7 @@
 module NeatInterpolation.Parsing where
 
 import Prelude ()
-import ClassyPrelude hiding (try, lines)
+import ClassyPrelude hiding (try, (<|>))
 import Text.Parsec hiding (Line)
 
 data Line = 

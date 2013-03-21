@@ -21,7 +21,7 @@ library
   other-modules:    NeatInterpolation.Parsing
                     NeatInterpolation.String
   build-depends:    base >= 4.5 && < 5,
-                    classy-prelude >= 0.5.0,
+                    classy-prelude >= 0.5.3,
                     template-haskell,
                     parsec
 
