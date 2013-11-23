@@ -1,20 +1,20 @@
-{-# LANGUAGE QuasiQuotes, TemplateHaskell, DeriveDataTypeable, OverloadedStrings #-}
 {-# OPTIONS_GHC -fno-warn-missing-fields #-} 
--- | NeatInterpolation provides a quasiquoter for producing `Text` data with a 
--- simple interpolation of input values. It removes the excessive indentation 
--- from the input text and accurately manages the indentation of all lines of 
--- interpolated variables. But enough words, the code shows it better.
+-- | 
+-- NeatInterpolation provides a quasiquoter for producing strings 
+-- with a simple interpolation of input values. 
+-- It removes the excessive indentation from the input and 
+-- accurately manages the indentation of all lines of interpolated variables. 
+-- But enough words, the code shows it better.
 -- 
 -- Consider the following declaration:
 -- 
 -- > {-# LANGUAGE QuasiQuotes, OverloadedStrings #-}
 -- > 
 -- > import NeatInterpolation
--- > import qualified Data.Text.IO as Text
 -- > 
--- > f :: Text -> Text -> Text
+-- > f :: String -> String -> String
 -- > f a b = 
--- >   [text|
+-- >   [string|
 -- >     function(){
 -- >       function(){
 -- >         $a
@@ -25,7 +25,7 @@
 -- 
 -- Executing the following:
 -- 
--- > main = Text.putStrLn $ f "1" "2"
+-- > main = putStrLn $ f "1" "2"
 -- 
 -- will produce this (notice the reduced indentation compared to how it was
 -- declared):
@@ -37,9 +37,9 @@
 -- >   return 2
 -- > }
 -- 
--- Now let's test it with multiline text parameters:
+-- Now let's test it with multiline string parameters:
 -- 
--- > main = Text.putStrLn $ f 
+-- > main = putStrLn $ f 
 -- >   "{\n  indented line\n  indented line\n}" 
 -- >   "{\n  indented line\n  indented line\n}" 
 --
@@ -60,10 +60,9 @@
 -- 
 -- See how it neatly preserved the indentation levels of lines the 
 -- variable placeholders were at?  
-module NeatInterpolation (text, indentQQPlaceholder) where
+module NeatInterpolation (string, indentQQPlaceholder) where
 
-import Prelude ()
-import ClassyPrelude
+import NeatInterpolation.Prelude
 
 import Language.Haskell.TH
 import Language.Haskell.TH.Quote
@@ -72,24 +71,27 @@ import NeatInterpolation.String
 import NeatInterpolation.Parsing
 
 
+-- |
+-- The quasiquoter.
+string :: QuasiQuoter
+string = QuasiQuoter {quoteExp = quoteExprExp}
 
-text :: QuasiQuoter
-text = QuasiQuoter {quoteExp = quoteExprExp}
-
-indentQQPlaceholder :: Int -> Text -> Text
+-- |
+-- A function used internally by quasiquoter. Just ignore it.
+indentQQPlaceholder :: Int -> String -> String
 indentQQPlaceholder indent text = case lines text of
-  head:tail -> intercalate "\n" $ head : map (replicate indent " " ++) tail
+  head:tail -> intercalate "\n" $ head : map (replicate indent ' ' ++) tail
   [] -> text 
 
 
-quoteExprExp :: [Char] -> Q Exp
+quoteExprExp :: String -> Q Exp
 quoteExprExp input = 
   case parseLines $ normalizeQQInput input of
     Left e -> fail $ show e
     Right lines -> appE [|unlines|] $ linesExp lines
 
 linesExp :: [Line] -> Q Exp
-linesExp [] = [|([] :: [Text])|]
+linesExp [] = [|([] :: [String])|]
 linesExp (head : tail) = 
   (binaryOpE [|(:)|])
     (lineExp head)
@@ -114,7 +116,7 @@ contentExp indent (LineContentIdentifier name) = do
     Nothing -> fail $ "Value `" ++ name ++ "` is not in scope"
 
 msumExps :: [Q Exp] -> Q Exp
-msumExps = fold (binaryOpE mappendE) memptyE
+msumExps = foldr (binaryOpE mappendE) memptyE
 memptyE = [|mempty|]
 mappendE = [|mappend|]
 

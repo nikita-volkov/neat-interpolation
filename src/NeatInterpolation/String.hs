@@ -1,10 +1,7 @@
-{-# LANGUAGE OverloadedStrings, NoMonomorphismRestriction #-}
 module NeatInterpolation.String where
 
-import Prelude ()
-import ClassyPrelude
+import NeatInterpolation.Prelude
 import Data.Char
-import Data.Foldable (foldr)
 
 
 normalizeQQInput :: [Char] -> [Char]

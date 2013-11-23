@@ -1,18 +1,14 @@
-{-# LANGUAGE QuasiQuotes, OverloadedStrings #-}
 
-import Prelude ()
-import ClassyPrelude
+import NeatInterpolation.Prelude
 import NeatInterpolation
-import NeatInterpolation.Parsing
-import NeatInterpolation.String
 
 main = do
-  let a' = [text| 
+  let a' = [string| 
     function startsWith( start, string ){
       return string.lastIndexOf( start ) == 0
     }
   |]
-  let pattern = [text| {
+  let pattern = [string| {
       
 
       $a'

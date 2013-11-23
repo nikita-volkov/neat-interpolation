@@ -1,9 +1,8 @@
-{-# LANGUAGE NoMonomorphismRestriction #-}
 module NeatInterpolation.Parsing where
 
-import Prelude ()
-import ClassyPrelude hiding (try, (<|>))
+import NeatInterpolation.Prelude hiding (try, (<|>), many)
 import Text.Parsec hiding (Line)
+
 
 data Line = 
   Line {lineIndent :: Int, lineContents :: [LineContent]}
