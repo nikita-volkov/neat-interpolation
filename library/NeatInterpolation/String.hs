@@ -1,7 +1,6 @@
 module NeatInterpolation.String where
 
-import NeatInterpolation.Prelude
-import Data.Char
+import BasePrelude
 
 
 normalizeQQInput :: [Char] -> [Char]

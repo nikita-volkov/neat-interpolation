@@ -62,7 +62,7 @@
 -- variable placeholders were at?  
 module NeatInterpolation (string, indentQQPlaceholder) where
 
-import NeatInterpolation.Prelude
+import BasePrelude
 
 import Language.Haskell.TH
 import Language.Haskell.TH.Quote

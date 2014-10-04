@@ -1,6 +1,6 @@
 module NeatInterpolation.Parsing where
 
-import NeatInterpolation.Prelude hiding (try, (<|>), many)
+import BasePrelude hiding (try, (<|>), many)
 import Text.Parsec hiding (Line)
 
 
