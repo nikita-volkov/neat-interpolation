@@ -1,5 +1,7 @@
-module NeatInterpolation.Prelude 
-  ( 
+{-# LANGUAGE CPP #-}
+
+module NeatInterpolation.Prelude
+  (
     module Exports,
     (?:),
     traceM,
@@ -48,5 +50,10 @@ import Control.Monad.ST as Exports
 maybeA ?: b = fromMaybe b maybeA
 {-# INLINE (?:) #-}
 
+
+#ifdef MIN_VERSION_base
+# if !MIN_VERSION_base(4,7,0)
 traceM :: (Monad m) => String -> m ()
 traceM s = trace s $ return ()
+# endif
+#endif
