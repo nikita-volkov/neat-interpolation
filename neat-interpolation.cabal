@@ -1,14 +1,14 @@
 name:
   neat-interpolation
 version:
-  0.2.0
+  0.2.1
 synopsis:
   A quasiquoter for neat and simple multiline text interpolation
 description:
-  NeatInterpolation provides a quasiquoter for producing strings 
-  with a simple interpolation of input values. 
-  It removes the excessive indentation from the input and 
-  accurately manages the indentation of all lines of interpolated variables. 
+  NeatInterpolation provides a quasiquoter for producing strings
+  with a simple interpolation of input values.
+  It removes the excessive indentation from the input and
+  accurately manages the indentation of all lines of interpolated variables.
 category:
   String, QuasiQoutes
 license:
@@ -92,7 +92,7 @@ executable neat-interpolation-demo
   main-is:
     Demo.hs
   ghc-options:
-    -threaded 
+    -threaded
     "-with-rtsopts=-N"
   build-depends:
     parsec,
