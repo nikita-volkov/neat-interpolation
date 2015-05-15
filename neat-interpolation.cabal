@@ -1,7 +1,7 @@
 name:
   neat-interpolation
 version:
-  0.2.2
+  0.2.2.1
 synopsis:
   A quasiquoter for neat and simple multiline text interpolation
 description:
@@ -48,9 +48,9 @@ library
     NeatInterpolation.String
   build-depends:
     parsec >= 3 && < 3.2,
-    template-haskell >= 2.8 && < 2.10,
+    template-haskell >= 2.8 && < 2.11,
     base-prelude == 0.1.*,
-    base >= 4.5 && < 4.8
+    base >= 4.6 && < 4.9
   ghc-options:
     -funbox-strict-fields
   default-extensions:
