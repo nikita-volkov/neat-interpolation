@@ -22,7 +22,8 @@ parseLines = parse lines "NeatInterpolation.Parsing.parseLines"
     countIndent = fmap length $ try $ lookAhead $ many $ char ' '
     content = try identifier <|> contentText
     identifier = fmap LineContentIdentifier $ 
-      string "$" *> many1 (alphaNum <|> char '\'' <|> char '_')
+      char '$' *> (try identifier' <|> between (char '{') (char '}') identifier')
+    identifier' = many1 (alphaNum <|> char '\'' <|> char '_')
     contentText = do
       text <- manyTill anyChar end
       if null text

@@ -60,6 +60,15 @@
 -- 
 -- See how it neatly preserved the indentation levels of lines the 
 -- variable placeholders were at?  
+--
+-- If you need to separate variable placeholder from the following text to
+-- prevent treating the rest of line as variable name, use escaped variable:
+--
+-- > f name = [string|this_could_be_${name}_long_identifier|]
+--
+-- So
+--
+-- > f "one" == "this_could_be_one_long_identifier"
 module NeatInterpolation (string, indentQQPlaceholder) where
 
 import BasePrelude
