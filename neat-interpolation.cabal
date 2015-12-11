@@ -47,6 +47,7 @@ library
     NeatInterpolation.Parsing
     NeatInterpolation.String
   build-depends:
+    text == 1.*,
     parsec >= 3 && < 3.2,
     template-haskell >= 2.8 && < 2.11,
     base-prelude == 0.1.*,

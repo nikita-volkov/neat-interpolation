@@ -8,11 +8,12 @@
 -- 
 -- Consider the following declaration:
 -- 
--- > {-# LANGUAGE QuasiQuotes, OverloadedStrings #-}
+-- > {-# LANGUAGE QuasiQuotes #-}
 -- > 
 -- > import NeatInterpolation
+-- > import Data.Text (Text)
 -- > 
--- > f :: String -> String -> String
+-- > f :: Text -> Text -> Text
 -- > f a b = 
 -- >   [string|
 -- >     function(){
@@ -25,7 +26,7 @@
 -- 
 -- Executing the following:
 -- 
--- > main = putStrLn $ f "1" "2"
+-- > main = T.putStrLn $ f "1" "2"
 -- 
 -- will produce this (notice the reduced indentation compared to how it was
 -- declared):
@@ -39,7 +40,7 @@
 -- 
 -- Now let's test it with multiline string parameters:
 -- 
--- > main = putStrLn $ f 
+-- > main = T.putStrLn $ f
 -- >   "{\n  indented line\n  indented line\n}" 
 -- >   "{\n  indented line\n  indented line\n}" 
 --
@@ -79,6 +80,9 @@ import Language.Haskell.TH.Quote
 import NeatInterpolation.String
 import NeatInterpolation.Parsing
 
+import Data.Text (Text)
+import qualified Data.Text as T
+
 
 -- |
 -- The quasiquoter.
@@ -87,9 +91,10 @@ string = QuasiQuoter {quoteExp = quoteExprExp}
 
 -- |
 -- A function used internally by quasiquoter. Just ignore it.
-indentQQPlaceholder :: Int -> String -> String
-indentQQPlaceholder indent text = case lines text of
-  head:tail -> intercalate "\n" $ head : map (replicate indent ' ' ++) tail
+indentQQPlaceholder :: Int -> Text -> Text
+indentQQPlaceholder indent text = case T.lines text of
+  head:tail -> T.intercalate (T.pack "\n") $
+               head : map (T.replicate indent (T.singleton ' ') <>) tail
   [] -> text 
 
 
@@ -97,23 +102,19 @@ quoteExprExp :: String -> Q Exp
 quoteExprExp input = 
   case parseLines $ normalizeQQInput input of
     Left e -> fail $ show e
-    Right lines -> appE [|unlines|] $ linesExp lines
-
-linesExp :: [Line] -> Q Exp
-linesExp [] = [|([] :: [String])|]
-linesExp (head : tail) = 
-  (binaryOpE [|(:)|])
-    (lineExp head)
-    (linesExp tail)
+    Right lines -> sigE (appE [|T.unlines|] $ listE $ map lineExp lines)
+                        [t|Text|]
 
 lineExp :: Line -> Q Exp
-lineExp (Line indent contents) = 
-  msumExps $ map (contentExp $ fromIntegral indent) contents
-
-
+lineExp (Line indent contents) =
+  case contents of
+    []  -> [| T.empty |]
+    [x] -> toExp x
+    xs  -> appE [|T.concat|] $ listE $ map toExp xs
+  where toExp = contentExp (fromIntegral indent)
 
 contentExp :: Integer -> LineContent -> Q Exp
-contentExp _ (LineContentText text) = stringE text
+contentExp _ (LineContentText text) = appE [|T.pack|] (stringE text)
 contentExp indent (LineContentIdentifier name) = do
   valueName <- lookupValueName name
   case valueName of
@@ -123,10 +124,3 @@ contentExp indent (LineContentIdentifier name) = do
         (appE (varE indentQQPlaceholderName) $ litE $ integerL indent)
         (varE valueName)
     Nothing -> fail $ "Value `" ++ name ++ "` is not in scope"
-
-msumExps :: [Q Exp] -> Q Exp
-msumExps = foldr (binaryOpE mappendE) memptyE
-memptyE = [|mempty|]
-mappendE = [|mappend|]
-
-binaryOpE e = \a b -> e `appE` a `appE` b
