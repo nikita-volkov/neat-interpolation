@@ -70,7 +70,7 @@
 -- So
 --
 -- > f "one" == "this_could_be_one_long_identifier"
-module NeatInterpolation (string, indentQQPlaceholder) where
+module NeatInterpolation (text) where
 
 import BasePrelude
 
@@ -86,11 +86,11 @@ import qualified Data.Text as T
 
 -- |
 -- The quasiquoter.
-string :: QuasiQuoter
-string = QuasiQuoter {quoteExp = quoteExprExp}
+text :: QuasiQuoter
+text = QuasiQuoter {quoteExp = quoteExprExp}
 
 -- |
--- A function used internally by quasiquoter. Just ignore it.
+-- A function used internally by the quasiquoter. Just ignore it.
 indentQQPlaceholder :: Int -> Text -> Text
 indentQQPlaceholder indent text = case T.lines text of
   head:tail -> T.intercalate (T.pack "\n") $
@@ -119,8 +119,7 @@ contentExp indent (LineContentIdentifier name) = do
   valueName <- lookupValueName name
   case valueName of
     Just valueName -> do
-      Just indentQQPlaceholderName <- lookupValueName "indentQQPlaceholder"
       appE
-        (appE (varE indentQQPlaceholderName) $ litE $ integerL indent)
+        (appE (varE 'indentQQPlaceholder) $ litE $ integerL indent)
         (varE valueName)
     Nothing -> fail $ "Value `" ++ name ++ "` is not in scope"

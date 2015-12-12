@@ -17,7 +17,7 @@ test_demo = do
     (escaped "one")
   where
     template a b = 
-      [string|
+      [text|
         function(){
           function(){
             $a
@@ -25,6 +25,6 @@ test_demo = do
           return $b
         }
       |]
-    escaped name = [string|this_could_be_${name}_long_identifier|]
+    escaped name = [text|this_could_be_${name}_long_identifier|]
     a = "{\n  indented line\n  indented line\n}"
 
