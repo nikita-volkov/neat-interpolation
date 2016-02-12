@@ -1,7 +1,7 @@
 name:
   neat-interpolation
 version:
-  0.3
+  0.3.1
 synopsis:
   A quasiquoter for neat and simple multiline text interpolation
 description:
@@ -48,10 +48,10 @@ library
     NeatInterpolation.String
   build-depends:
     text == 1.*,
-    parsec >= 3 && < 3.2,
-    template-haskell >= 2.8 && < 2.11,
-    base-prelude == 0.1.*,
-    base >= 4.6 && < 4.9
+    parsec >= 3 && < 4,
+    template-haskell >= 2.8 && < 3,
+    base-prelude < 2,
+    base >= 4.6 && < 5
   ghc-options:
     -funbox-strict-fields
   default-extensions:
@@ -70,7 +70,7 @@ test-suite api-tests
   build-depends:
     neat-interpolation,
     HTF >= 0.11 && < 0.14,
-    base-prelude == 0.1.*
+    base-prelude
   default-extensions:
     Arrows, BangPatterns, ConstraintKinds, DataKinds, DefaultSignatures, DeriveDataTypeable, DeriveFunctor, DeriveGeneric, EmptyDataDecls, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GADTs, GeneralizedNewtypeDeriving, ImpredicativeTypes, LambdaCase, LiberalTypeSynonyms, MagicHash, MultiParamTypeClasses, MultiWayIf, NoImplicitPrelude, NoMonomorphismRestriction, OverloadedStrings, PatternGuards, ParallelListComp, QuasiQuotes, RankNTypes, RecordWildCards, ScopedTypeVariables, StandaloneDeriving, TemplateHaskell, TupleSections, TypeFamilies, TypeOperators, UnboxedTuples
   default-language:
