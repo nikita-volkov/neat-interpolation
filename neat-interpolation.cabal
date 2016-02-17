@@ -1,7 +1,7 @@
 name:
   neat-interpolation
 version:
-  0.3.1
+  0.3.1.1
 synopsis:
   A quasiquoter for neat and simple multiline text interpolation
 description:
