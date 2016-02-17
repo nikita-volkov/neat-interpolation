@@ -1,21 +1,21 @@
-{-# OPTIONS_GHC -fno-warn-missing-fields #-} 
--- | 
--- NeatInterpolation provides a quasiquoter for producing strings 
--- with a simple interpolation of input values. 
--- It removes the excessive indentation from the input and 
--- accurately manages the indentation of all lines of interpolated variables. 
+{-# OPTIONS_GHC -fno-warn-missing-fields #-}
+-- |
+-- NeatInterpolation provides a quasiquoter for producing strings
+-- with a simple interpolation of input values.
+-- It removes the excessive indentation from the input and
+-- accurately manages the indentation of all lines of interpolated variables.
 -- But enough words, the code shows it better.
--- 
+--
 -- Consider the following declaration:
--- 
+--
 -- > {-# LANGUAGE QuasiQuotes #-}
--- > 
+-- >
 -- > import NeatInterpolation
 -- > import Data.Text (Text)
--- > 
+-- >
 -- > f :: Text -> Text -> Text
--- > f a b = 
--- >   [string|
+-- > f a b =
+-- >   [text|
 -- >     function(){
 -- >       function(){
 -- >         $a
@@ -23,26 +23,26 @@
 -- >       return $b
 -- >     }
 -- >   |]
--- 
+--
 -- Executing the following:
--- 
+--
 -- > main = T.putStrLn $ f "1" "2"
--- 
+--
 -- will produce this (notice the reduced indentation compared to how it was
 -- declared):
--- 
+--
 -- > function(){
 -- >   function(){
 -- >     1
 -- >   }
 -- >   return 2
 -- > }
--- 
+--
 -- Now let's test it with multiline string parameters:
--- 
+--
 -- > main = T.putStrLn $ f
--- >   "{\n  indented line\n  indented line\n}" 
--- >   "{\n  indented line\n  indented line\n}" 
+-- >   "{\n  indented line\n  indented line\n}"
+-- >   "{\n  indented line\n  indented line\n}"
 --
 -- We get
 --
@@ -58,14 +58,14 @@
 -- >     indented line
 -- >   }
 -- > }
--- 
--- See how it neatly preserved the indentation levels of lines the 
--- variable placeholders were at?  
+--
+-- See how it neatly preserved the indentation levels of lines the
+-- variable placeholders were at?
 --
 -- If you need to separate variable placeholder from the following text to
 -- prevent treating the rest of line as variable name, use escaped variable:
 --
--- > f name = [string|this_could_be_${name}_long_identifier|]
+-- > f name = [text|this_could_be_${name}_long_identifier|]
 --
 -- So
 --
@@ -95,11 +95,11 @@ indentQQPlaceholder :: Int -> Text -> Text
 indentQQPlaceholder indent text = case T.lines text of
   head:tail -> T.intercalate (T.pack "\n") $
                head : map (T.replicate indent (T.singleton ' ') <>) tail
-  [] -> text 
+  [] -> text
 
 
 quoteExprExp :: String -> Q Exp
-quoteExprExp input = 
+quoteExprExp input =
   case parseLines $ normalizeQQInput input of
     Left e -> fail $ show e
     Right lines -> sigE (appE [|T.unlines|] $ listE $ map lineExp lines)
