@@ -3,7 +3,6 @@ module NeatInterpolation.Parsing where
 import BasePrelude hiding (try, (<|>), many)
 import Text.Parsec hiding (Line)
 
-
 data Line = 
   Line {lineIndent :: Int, lineContents :: [LineContent]}
   deriving (Show)
@@ -13,16 +12,16 @@ data LineContent =
   LineContentIdentifier [Char]
   deriving (Show)
 
-
 parseLines :: [Char] -> Either ParseError [Line]
 parseLines = parse lines "NeatInterpolation.Parsing.parseLines"
   where
     lines = sepBy line newline <* eof
     line = Line <$> countIndent <*> many content
     countIndent = fmap length $ try $ lookAhead $ many $ char ' '
-    content = try identifier <|> contentText
+    content = try escapedDollar <|> try identifier <|> contentText
     identifier = fmap LineContentIdentifier $ 
       char '$' *> (try identifier' <|> between (char '{') (char '}') identifier')
+    escapedDollar = fmap LineContentText $ char '$' *> count 1 (char '$')
     identifier' = many1 (alphaNum <|> char '\'' <|> char '_')
     contentText = do
       text <- manyTill anyChar end
@@ -30,7 +29,8 @@ parseLines = parse lines "NeatInterpolation.Parsing.parseLines"
         then fail "Empty text"
         else return $ LineContentText $ text
       where
-        end = 
+        end =
+          (void $ try $ lookAhead escapedDollar) <|>
           (void $ try $ lookAhead identifier) <|> 
           (void $ try $ lookAhead newline) <|> 
           eof

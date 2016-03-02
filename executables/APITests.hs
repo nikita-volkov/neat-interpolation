@@ -10,10 +10,10 @@ main = htfMain $ htf_thisModulesTests
 
 test_demo = do
   assertEqual
-    "function(){\n  function(){\n    {\n      indented line\n      indented line\n    }\n  }\n  return {\n    indented line\n    indented line\n  }\n}\n"
+    "function(){\n  function(){\n    {\n      indented line\n      indented line\n    }\n  }\n  return \"$b\"\n}\n"
     (template a a)
   assertEqual
-    "this_could_be_one_long_identifier\n"
+    "this_could_be_$one$_long_identifier\n"
     (escaped "one")
   where
     template a b = 
@@ -22,9 +22,9 @@ test_demo = do
           function(){
             $a
           }
-          return $b
+          return "$$b"
         }
       |]
-    escaped name = [text|this_could_be_${name}_long_identifier|]
+    escaped name = [text|this_could_be_$$${name}$$_long_identifier|]
     a = "{\n  indented line\n  indented line\n}"
 
