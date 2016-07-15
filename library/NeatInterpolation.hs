@@ -70,6 +70,15 @@
 -- So
 --
 -- > f "one" == "this_could_be_one_long_identifier"
+--
+-- If you want to write something that looks like a variable but should be
+-- inserted as-is, escape it with another @$@:
+--
+-- > f word = [text|$$my ${word} $${string}|]
+--
+-- results in
+--
+-- > f "funny" == "$my funny ${string}|]
 module NeatInterpolation (text) where
 
 import BasePrelude
