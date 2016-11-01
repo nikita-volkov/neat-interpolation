@@ -10,7 +10,7 @@ description:
   It removes the excessive indentation from the input and 
   accurately manages the indentation of all lines of the interpolated variables. 
 category:
-  String, QuasiQoutes
+  String, QuasiQuotes
 license:
   MIT
 license-file:
