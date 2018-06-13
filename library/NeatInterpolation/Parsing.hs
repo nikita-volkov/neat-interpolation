@@ -1,3 +1,6 @@
+{-# LANGUAGE CPP       #-}
+{-# LANGUAGE EmptyCase #-}
+
 module NeatInterpolation.Parsing where
 
 import BasePrelude hiding (many, some, try, (<|>))
@@ -13,6 +16,22 @@ data LineContent =
   LineContentText [Char] |
   LineContentIdentifier [Char]
   deriving (Show)
+
+#if ( __GLASGOW_HASKELL__ < 710 )
+data Void
+
+instance Eq Void where
+    _ == _ = True
+
+instance Ord Void where
+    compare _ _ = EQ
+
+instance ShowErrorComponent Void where
+   showErrorComponent = absurd
+
+absurd :: Void -> a
+absurd a = case a of {}
+#endif
 
 type Parser = Parsec Void String
 
