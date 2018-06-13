@@ -1,28 +1,39 @@
 module NeatInterpolation.Parsing where
 
-import BasePrelude hiding (try, (<|>), many)
-import Text.Parsec hiding (Line)
+import BasePrelude hiding (many, some, try, (<|>))
+import Data.Text (Text, pack)
+import Text.Megaparsec hiding (Line)
+import Text.Megaparsec.Char
 
-data Line = 
+data Line =
   Line {lineIndent :: Int, lineContents :: [LineContent]}
   deriving (Show)
 
-data LineContent = 
+data LineContent =
   LineContentText [Char] |
   LineContentIdentifier [Char]
   deriving (Show)
 
-parseLines :: [Char] -> Either ParseError [Line]
-parseLines = parse lines "NeatInterpolation.Parsing.parseLines"
+type Parser = Parsec Void String
+
+-- | Pretty parse exception for parsing lines.
+newtype ParseException = ParseException Text
+    deriving (Show, Eq)
+
+parseLines :: [Char] -> Either ParseException [Line]
+parseLines input = case parse lines "NeatInterpolation.Parsing.parseLines" input of
+    Left err     -> Left $ ParseException $ pack $ parseErrorPretty' input err
+    Right output -> Right output
   where
+    lines :: Parser [Line]
     lines = sepBy line newline <* eof
     line = Line <$> countIndent <*> many content
     countIndent = fmap length $ try $ lookAhead $ many $ char ' '
     content = try escapedDollar <|> try identifier <|> contentText
-    identifier = fmap LineContentIdentifier $ 
+    identifier = fmap LineContentIdentifier $
       char '$' *> (try identifier' <|> between (char '{') (char '}') identifier')
     escapedDollar = fmap LineContentText $ char '$' *> count 1 (char '$')
-    identifier' = many1 (alphaNum <|> char '\'' <|> char '_')
+    identifier' = some (alphaNumChar <|> char '\'' <|> char '_')
     contentText = do
       text <- manyTill anyChar end
       if null text
@@ -31,6 +42,6 @@ parseLines = parse lines "NeatInterpolation.Parsing.parseLines"
       where
         end =
           (void $ try $ lookAhead escapedDollar) <|>
-          (void $ try $ lookAhead identifier) <|> 
-          (void $ try $ lookAhead newline) <|> 
+          (void $ try $ lookAhead identifier) <|>
+          (void $ try $ lookAhead newline) <|>
           eof

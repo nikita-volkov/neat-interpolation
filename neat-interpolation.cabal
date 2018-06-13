@@ -1,14 +1,14 @@
 name:
   neat-interpolation
 version:
-  0.3.2.1
+  0.3.2.2
 synopsis:
   A quasiquoter for neat and simple multiline text interpolation
 description:
   A quasiquoter for producing Text values with support for
-  a simple interpolation of input values. 
-  It removes the excessive indentation from the input and 
-  accurately manages the indentation of all lines of the interpolated variables. 
+  a simple interpolation of input values.
+  It removes the excessive indentation from the input and
+  accurately manages the indentation of all lines of the interpolated variables.
 category:
   String, QuasiQuotes
 license:
@@ -48,7 +48,7 @@ library
     NeatInterpolation.String
   build-depends:
     text == 1.*,
-    parsec >= 3 && < 4,
+    megaparsec >= 6.5 && < 7,
     template-haskell >= 2.8 && < 3,
     base-prelude < 2,
     base >= 4.6 && < 5
