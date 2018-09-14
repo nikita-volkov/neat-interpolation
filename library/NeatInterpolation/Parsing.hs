@@ -1,6 +1,3 @@
-{-# LANGUAGE CPP       #-}
-{-# LANGUAGE EmptyCase #-}
-
 module NeatInterpolation.Parsing where
 
 import BasePrelude hiding (many, some, try, (<|>))
@@ -17,22 +14,6 @@ data LineContent =
   LineContentIdentifier [Char]
   deriving (Show)
 
-#if ( __GLASGOW_HASKELL__ < 710 )
-data Void
-
-instance Eq Void where
-    _ == _ = True
-
-instance Ord Void where
-    compare _ _ = EQ
-
-instance ShowErrorComponent Void where
-   showErrorComponent = absurd
-
-absurd :: Void -> a
-absurd a = case a of {}
-#endif
-
 type Parser = Parsec Void String
 
 -- | Pretty parse exception for parsing lines.
@@ -41,7 +22,7 @@ newtype ParseException = ParseException Text
 
 parseLines :: [Char] -> Either ParseException [Line]
 parseLines input = case parse lines "NeatInterpolation.Parsing.parseLines" input of
-    Left err     -> Left $ ParseException $ pack $ parseErrorPretty' input err
+    Left err -> Left $ ParseException $ pack $ errorBundlePretty err
     Right output -> Right output
   where
     lines :: Parser [Line]
@@ -54,7 +35,7 @@ parseLines input = case parse lines "NeatInterpolation.Parsing.parseLines" input
     escapedDollar = fmap LineContentText $ char '$' *> count 1 (char '$')
     identifier' = some (alphaNumChar <|> char '\'' <|> char '_')
     contentText = do
-      text <- manyTill anyChar end
+      text <- manyTill anySingle end
       if null text
         then fail "Empty text"
         else return $ LineContentText $ text
