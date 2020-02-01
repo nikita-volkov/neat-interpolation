@@ -108,7 +108,7 @@ quoteExp :: String -> Q Exp
 quoteExp input =
   case parseLines $ normalizeQQInput input of
     Left e -> fail $ show e
-    Right lines -> sigE (appE [|T.unlines|] $ listE $ map lineExp lines)
+    Right lines -> sigE (appE [|T.intercalate "\n"|] $ listE $ map lineExp lines)
                         [t|Text|]
 
 lineExp :: Line -> Q Exp

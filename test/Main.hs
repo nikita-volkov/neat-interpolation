@@ -25,13 +25,13 @@ main = defaultMain $ testGroup "" $
         |]
       a = "{\n  indented line\n  indented line\n}"
       in assertEqual ""
-          "function(){\n  function(){\n    {\n      indented line\n      indented line\n    }\n  }\n  return {\n    indented line\n    indented line\n  }\n}\n"
+          "function(){\n  function(){\n    {\n      indented line\n      indented line\n    }\n  }\n  return {\n    indented line\n    indented line\n  }\n}"
           (template a a)
     ,
     testCase "Isolation" $ let
       isolated name = [text|this_could_be_${name}_long_identifier|]
       in assertEqual ""
-          "this_could_be_one_long_identifier\n"
+          "this_could_be_one_long_identifier"
           (isolated "one")
     ,
     testCase "Escaping" $ let
@@ -48,9 +48,9 @@ main = defaultMain $ testGroup "" $
       a = "{\n  indented line\n  indented line\n}"
       in do
         assertEqual ""
-          "function(){\n  function(){\n    {\n      indented line\n      indented line\n    }\n  }\n  return \"$b\"\n}\n"
+          "function(){\n  function(){\n    {\n      indented line\n      indented line\n    }\n  }\n  return \"$b\"\n}"
           (template a a)
         assertEqual ""
-          "this_could_be_$one$_long_identifier\n"
+          "this_could_be_$one$_long_identifier"
           (escaped "one")
   ]
