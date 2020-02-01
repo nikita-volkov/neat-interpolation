@@ -15,7 +15,7 @@ main = defaultMain $ testGroup "" $
   [
     testCase "Demo" $ let
       template a b = 
-        [text|
+        [trimming|
           function(){
             function(){
               $a
@@ -29,14 +29,14 @@ main = defaultMain $ testGroup "" $
           (template a a)
     ,
     testCase "Isolation" $ let
-      isolated name = [text|this_could_be_${name}_long_identifier|]
+      isolated name = [trimming|this_could_be_${name}_long_identifier|]
       in assertEqual ""
           "this_could_be_one_long_identifier"
           (isolated "one")
     ,
     testCase "Escaping" $ let
       template a b = 
-        [text|
+        [trimming|
           function(){
             function(){
               $a
@@ -44,7 +44,7 @@ main = defaultMain $ testGroup "" $
             return "$$b"
           }
         |]
-      escaped name = [text|this_could_be_$$${name}$$_long_identifier|]
+      escaped name = [trimming|this_could_be_$$${name}$$_long_identifier|]
       a = "{\n  indented line\n  indented line\n}"
       in do
         assertEqual ""
