@@ -94,14 +94,15 @@ expQQ quoteExp = QuasiQuoter quoteExp notSupported notSupported notSupported whe
 
 {-|
 Trimmed quasiquoter variation.
-Removes the leading and trailing whitespace.
+Same as `untrimming`, but also
+removes the leading and trailing whitespace.
 -}
 trimming :: QuasiQuoter
 trimming = expQQ (quoteExp . String.trim . String.unindent . String.tabsToSpaces)
 
 {-|
 Untrimmed quasiquoter variation.
-Treats the quoted string as it is.
+Unindents the quoted template and converts tabs to spaces.
 -}
 untrimming :: QuasiQuoter
 untrimming = expQQ (quoteExp . String.unindent . String.tabsToSpaces)
