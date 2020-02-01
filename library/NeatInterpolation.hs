@@ -100,7 +100,7 @@ text = QuasiQuoter {quoteExp = quoteExprExp}
 
 indentQQPlaceholder :: Int -> Text -> Text
 indentQQPlaceholder indent text = case T.lines text of
-  head:tail -> T.intercalate (T.pack "\n") $
+  head:tail -> T.intercalate (T.singleton '\n') $
                head : map (T.replicate indent (T.singleton ' ') <>) tail
   [] -> text
 
