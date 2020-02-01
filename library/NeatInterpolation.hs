@@ -77,7 +77,7 @@
 --
 -- results in
 --
--- > f "funny" == "$my funny ${string}|]
+-- > f "funny" == "$my funny ${string}"
 module NeatInterpolation (text) where
 
 import NeatInterpolation.Prelude
