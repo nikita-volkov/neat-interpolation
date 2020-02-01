@@ -98,14 +98,11 @@ import qualified Data.Text as T
 text :: QuasiQuoter
 text = QuasiQuoter {quoteExp = quoteExprExp}
 
--- |
--- A function used internally by the quasiquoter. Just ignore it.
 indentQQPlaceholder :: Int -> Text -> Text
 indentQQPlaceholder indent text = case T.lines text of
   head:tail -> T.intercalate (T.pack "\n") $
                head : map (T.replicate indent (T.singleton ' ') <>) tail
   [] -> text
-
 
 quoteExprExp :: String -> Q Exp
 quoteExprExp input =
