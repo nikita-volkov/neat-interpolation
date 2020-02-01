@@ -1,5 +1,5 @@
 name: neat-interpolation
-version: 0.3.2.6
+version: 0.4
 synopsis: A quasiquoter for neat and simple multiline text interpolation
 description:
   A quasiquoter for producing Text values with support for
@@ -16,6 +16,7 @@ homepage: https://github.com/nikita-volkov/neat-interpolation
 bug-reports: https://github.com/nikita-volkov/neat-interpolation/issues
 build-type: Simple
 cabal-version: >=1.10
+extra-source-files: CHANGELOG.md
 
 source-repository head
   type: git
