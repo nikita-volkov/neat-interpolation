@@ -1,4 +1,3 @@
-{-# OPTIONS_GHC -fno-warn-missing-fields #-}
 -- |
 -- NeatInterpolation provides a quasiquoter for producing strings
 -- with a simple interpolation of input values.
@@ -81,10 +80,10 @@
 -- > f "funny" == "$my funny ${string}|]
 module NeatInterpolation (text) where
 
-import BasePrelude
+import NeatInterpolation.Prelude
 
 import Language.Haskell.TH
-import Language.Haskell.TH.Quote
+import Language.Haskell.TH.Quote hiding (quoteExp)
 
 import NeatInterpolation.String
 import NeatInterpolation.Parsing
@@ -96,7 +95,8 @@ import qualified Data.Text as T
 -- |
 -- The quasiquoter.
 text :: QuasiQuoter
-text = QuasiQuoter {quoteExp = quoteExprExp}
+text = QuasiQuoter quoteExp notSupported notSupported notSupported where
+  notSupported _ = fail "Quotation in this context is not supported"
 
 indentQQPlaceholder :: Int -> Text -> Text
 indentQQPlaceholder indent text = case T.lines text of
@@ -104,8 +104,8 @@ indentQQPlaceholder indent text = case T.lines text of
                head : map (T.replicate indent (T.singleton ' ') <>) tail
   [] -> text
 
-quoteExprExp :: String -> Q Exp
-quoteExprExp input =
+quoteExp :: String -> Q Exp
+quoteExp input =
   case parseLines $ normalizeQQInput input of
     Left e -> fail $ show e
     Right lines -> sigE (appE [|T.unlines|] $ listE $ map lineExp lines)
