@@ -34,7 +34,7 @@ main = defaultMain $ testGroup "" $
           "this_could_be_one_long_identifier"
           (isolated "one")
     ,
-    testCase "Escaping" $ let
+    testCase "Escaping 1" $ let
       template a b = 
         [trimming|
           function(){
@@ -44,13 +44,14 @@ main = defaultMain $ testGroup "" $
             return "$$b"
           }
         |]
-      escaped name = [trimming|this_could_be_$$${name}$$_long_identifier|]
       a = "{\n  indented line\n  indented line\n}"
-      in do
-        assertEqual ""
+      in assertEqual ""
           "function(){\n  function(){\n    {\n      indented line\n      indented line\n    }\n  }\n  return \"$b\"\n}"
           (template a a)
-        assertEqual ""
+    ,
+    testCase "Escaping 2" $ let
+      escaped name = [trimming|this_could_be_$$${name}$$_long_identifier|]
+      in assertEqual ""
           "this_could_be_$one$_long_identifier"
           (escaped "one")
     ,
