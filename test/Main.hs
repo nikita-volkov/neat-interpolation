@@ -53,4 +53,13 @@ main = defaultMain $ testGroup "" $
         assertEqual ""
           "this_could_be_$one$_long_identifier"
           (escaped "one")
+    ,
+    testCase "Deindentation" $ let
+      template fieldName className = [trimming|
+          * @param $fieldName value of the {@code $fieldName} property of
+                   the {@code $className} case
+        |]
+      in assertEqual ""
+          "* @param a value of the {@code a} property of\n         the {@code b} case"
+          (template "a" "b")
   ]
