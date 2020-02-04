@@ -79,7 +79,7 @@ results in
 
 > f "funny" == "$my funny ${string}"
 -}
-module NeatInterpolation (trimming, untrimming) where
+module NeatInterpolation (trimming, untrimming, text) where
 
 import NeatInterpolation.Prelude
 import Language.Haskell.TH
@@ -91,6 +91,14 @@ import qualified NeatInterpolation.Parsing as Parsing
 
 expQQ quoteExp = QuasiQuoter quoteExp notSupported notSupported notSupported where
   notSupported _ = fail "Quotation in this context is not supported"
+
+{-|
+Trimmed quasiquoter variation.
+Same as `untrimming`, but also
+removes the leading and trailing whitespace.
+-}
+text :: QuasiQuoter
+text = trimming
 
 {-|
 Trimmed quasiquoter variation.
