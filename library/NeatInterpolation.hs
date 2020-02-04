@@ -93,9 +93,7 @@ expQQ quoteExp = QuasiQuoter quoteExp notSupported notSupported notSupported whe
   notSupported _ = fail "Quotation in this context is not supported"
 
 {-|
-Trimmed quasiquoter variation.
-Same as `untrimming`, but also
-removes the leading and trailing whitespace.
+An alias to `trimming` for backward-compatibility.
 -}
 text :: QuasiQuoter
 text = trimming
