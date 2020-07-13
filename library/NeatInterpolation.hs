@@ -123,7 +123,7 @@ quoteExp :: String -> Q Exp
 quoteExp input =
   case Parsing.parseLines input of
     Left e -> fail $ show e
-    Right lines -> sigE (appE [|Text.intercalate "\n"|] $ listE $ map lineExp lines)
+    Right lines -> sigE (appE [|Text.intercalate (Text.singleton '\n')|] $ listE $ map lineExp lines)
                         [t|Text|]
 
 lineExp :: Parsing.Line -> Q Exp
