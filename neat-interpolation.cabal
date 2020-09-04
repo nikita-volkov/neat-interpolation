@@ -34,7 +34,7 @@ library
     NeatInterpolation.String
   build-depends:
     base >=4.9 && <5,
-    megaparsec >=7 && <9,
+    megaparsec >=7 && <10,
     template-haskell >=2.8 && <3,
     text ==1.*
 
