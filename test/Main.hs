@@ -7,9 +7,12 @@ import Test.Tasty.Runners
 import Test.Tasty.HUnit
 import Test.Tasty.QuickCheck
 import NeatInterpolation
+import qualified Data.Text.Lazy as TL
+import qualified Data.Text as T
+import qualified Data.ByteString.Lazy as BL
+import qualified Data.ByteString as BS
 import qualified Test.QuickCheck as QuickCheck
 import qualified Test.QuickCheck.Property as QuickCheck
-
 
 main = defaultMain $ testGroup "" $
   [
@@ -63,4 +66,12 @@ main = defaultMain $ testGroup "" $
       in assertEqual ""
           "* @param a value of the {@code a} property of\n         the {@code b} case"
           (template "a" "b")
+    ,
+    testGroup "Polymorphism"
+      [ testCase "String"          $ assertEqual "" [trimming|foo|] ("foo" :: String)
+      , testCase "Text"            $ assertEqual "" [trimming|foo|] ("foo" :: T.Text)
+      , testCase "Lazy Text"       $ assertEqual "" [trimming|foo|] ("foo" :: TL.Text)
+      , testCase "ByteString"      $ assertEqual "" [trimming|foo|] ("foo" :: BS.ByteString)
+      , testCase "Lazy ByteString" $ assertEqual "" [trimming|foo|] ("foo" :: BL.ByteString)
+      ]
   ]

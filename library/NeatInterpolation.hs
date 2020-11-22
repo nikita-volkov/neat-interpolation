@@ -123,8 +123,8 @@ quoteExp :: String -> Q Exp
 quoteExp input =
   case Parsing.parseLines input of
     Left e -> fail $ show e
-    Right lines -> sigE (appE [|Text.intercalate (Text.singleton '\n')|] $ listE $ map lineExp lines)
-                        [t|Text|]
+    Right lines -> sigE (appE [|fromString . Text.unpack . Text.intercalate (Text.singleton '\n')|] $ listE $ map lineExp lines)
+                        [t|forall a. IsString a => a|]
 
 lineExp :: Parsing.Line -> Q Exp
 lineExp (Parsing.Line indent contents) =
