@@ -1,84 +1,82 @@
-{-|
-NeatInterpolation provides a quasiquoter for producing strings
-with a simple interpolation of input values.
-It removes the excessive indentation from the input and
-accurately manages the indentation of all lines of interpolated variables.
-But enough words, the code shows it better.
-
-Consider the following declaration:
-
-> {-# LANGUAGE QuasiQuotes #-}
->
-> import NeatInterpolation
-> import Data.Text (Text)
->
-> f :: Text -> Text -> Text
-> f a b =
->   [trimming|
->     function(){
->       function(){
->         $a
->       }
->       return $b
->     }
->   |]
-
-Executing the following:
-
-> main = Text.putStrLn $ f "1" "2"
-
-will produce this (notice the reduced indentation compared to how it was
-declared):
-
-> function(){
->   function(){
->     1
->   }
->   return 2
-> }
-
-Now let's test it with multiline string parameters:
-
-> main = Text.putStrLn $ f
->   "{\n  indented line\n  indented line\n}"
->   "{\n  indented line\n  indented line\n}"
-
-We get
-
-> function(){
->   function(){
->     {
->       indented line
->       indented line
->     }
->   }
->   return {
->     indented line
->     indented line
->   }
-> }
-
-See how it neatly preserved the indentation levels of lines the
-variable placeholders were at?
-
-If you need to separate variable placeholder from the following text to
-prevent treating the rest of line as variable name, use escaped variable:
-
-> f name = [trimming|this_could_be_${name}_long_identifier|]
-
-So
-
-> f "one" == "this_could_be_one_long_identifier"
-
-If you want to write something that looks like a variable but should be
-inserted as-is, escape it with another @$@:
-
-> f word = [trimming|$$my ${word} $${string}|]
-
-results in
-
-> f "funny" == "$my funny ${string}"
--}
+-- NeatInterpolation provides a quasiquoter for producing strings
+-- with a simple interpolation of input values.
+-- It removes the excessive indentation from the input and
+-- accurately manages the indentation of all lines of interpolated variables.
+-- But enough words, the code shows it better.
+--
+-- Consider the following declaration:
+--
+-- > {-# LANGUAGE QuasiQuotes #-}
+-- >
+-- > import NeatInterpolation
+-- > import Data.Text (Text)
+-- >
+-- > f :: Text -> Text -> Text
+-- > f a b =
+-- >   [trimming|
+-- >     function(){
+-- >       function(){
+-- >         $a
+-- >       }
+-- >       return $b
+-- >     }
+-- >   |]
+--
+-- Executing the following:
+--
+-- > main = Text.putStrLn $ f "1" "2"
+--
+-- will produce this (notice the reduced indentation compared to how it was
+-- declared):
+--
+-- > function(){
+-- >   function(){
+-- >     1
+-- >   }
+-- >   return 2
+-- > }
+--
+-- Now let's test it with multiline string parameters:
+--
+-- > main = Text.putStrLn $ f
+-- >   "{\n  indented line\n  indented line\n}"
+-- >   "{\n  indented line\n  indented line\n}"
+--
+-- We get
+--
+-- > function(){
+-- >   function(){
+-- >     {
+-- >       indented line
+-- >       indented line
+-- >     }
+-- >   }
+-- >   return {
+-- >     indented line
+-- >     indented line
+-- >   }
+-- > }
+--
+-- See how it neatly preserved the indentation levels of lines the
+-- variable placeholders were at?
+--
+-- If you need to separate variable placeholder from the following text to
+-- prevent treating the rest of line as variable name, use escaped variable:
+--
+-- > f name = [trimming|this_could_be_${name}_long_identifier|]
+--
+-- So
+--
+-- > f "one" == "this_could_be_one_long_identifier"
+--
+-- If you want to write something that looks like a variable but should be
+-- inserted as-is, escape it with another @$@:
+--
+-- > f word = [trimming|$$my ${word} $${string}|]
+--
+-- results in
+--
+-- > f "funny" == "$my funny ${string}"
 module NeatInterpolation (trimming, untrimming, text) where
 
 import NeatInterpolation.Prelude
