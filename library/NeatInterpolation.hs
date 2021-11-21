@@ -1,3 +1,4 @@
+-- |
 -- NeatInterpolation provides a quasiquoter for producing strings
 -- with a simple interpolation of input values.
 -- It removes the excessive indentation from the input and
