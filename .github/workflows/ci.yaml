@@ -34,7 +34,8 @@ jobs:
           - ghc: '8.8.4'
           - ghc: '9.6.3'
             ghc-options: -Werror -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wredundant-constraints -Wunused-packages -Wno-name-shadowing -Wno-unused-matches -Wno-unused-do-bind -Wno-type-defaults
-
+          - ghc: '9.8.1'
+          
     runs-on: ubuntu-latest
 
     steps:
