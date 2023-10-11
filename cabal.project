@@ -1,0 +1,12 @@
+packages: .
+
+if impl(ghc >= 9.8)
+  constraints:
+    , primitive >= 0.5
+    , text >= 2.1
+
+  allow-newer:
+    , *:base
+    , *:bytestring
+    , *:deepseq
+    , *:text
