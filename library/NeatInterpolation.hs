@@ -80,58 +80,59 @@
 -- > f "funny" == "$my funny ${string}"
 module NeatInterpolation (trimming, untrimming, text) where
 
-import NeatInterpolation.Prelude
+import qualified Data.Text as Text
 import Language.Haskell.TH
 import Language.Haskell.TH.Quote hiding (quoteExp)
-import qualified Data.Text as Text
-import qualified NeatInterpolation.String as String
 import qualified NeatInterpolation.Parsing as Parsing
+import NeatInterpolation.Prelude
+import qualified NeatInterpolation.String as String
 
+expQQ quoteExp = QuasiQuoter quoteExp notSupported notSupported notSupported
+  where
+    notSupported _ = fail "Quotation in this context is not supported"
 
-expQQ quoteExp = QuasiQuoter quoteExp notSupported notSupported notSupported where
-  notSupported _ = fail "Quotation in this context is not supported"
-
-{-|
-An alias to `trimming` for backward-compatibility.
--}
+-- |
+-- An alias to `trimming` for backward-compatibility.
 text :: QuasiQuoter
 text = trimming
 
-{-|
-Trimmed quasiquoter variation.
-Same as `untrimming`, but also
-removes the leading and trailing whitespace.
--}
+-- |
+-- Trimmed quasiquoter variation.
+-- Same as `untrimming`, but also
+-- removes the leading and trailing whitespace.
 trimming :: QuasiQuoter
 trimming = expQQ (quoteExp . String.trim . String.unindent . String.tabsToSpaces)
 
-{-|
-Untrimmed quasiquoter variation.
-Unindents the quoted template and converts tabs to spaces.
--}
+-- |
+-- Untrimmed quasiquoter variation.
+-- Unindents the quoted template and converts tabs to spaces.
 untrimming :: QuasiQuoter
 untrimming = expQQ (quoteExp . String.unindent . String.tabsToSpaces)
 
 indentQQPlaceholder :: Int -> Text -> Text
 indentQQPlaceholder indent text = case Text.lines text of
-  head:tail -> Text.intercalate (Text.singleton '\n') $
-               head : map (Text.replicate indent (Text.singleton ' ') <>) tail
+  head : tail ->
+    Text.intercalate (Text.singleton '\n') $
+      head : map (Text.replicate indent (Text.singleton ' ') <>) tail
   [] -> text
 
 quoteExp :: String -> Q Exp
 quoteExp input =
   case Parsing.parseLines input of
     Left e -> fail $ show e
-    Right lines -> sigE (appE [|Text.intercalate (Text.singleton '\n')|] $ listE $ map lineExp lines)
-                        [t|Text|]
+    Right lines ->
+      sigE
+        (appE [|Text.intercalate (Text.singleton '\n')|] $ listE $ map lineExp lines)
+        [t|Text|]
 
 lineExp :: Parsing.Line -> Q Exp
 lineExp (Parsing.Line indent contents) =
   case contents of
-    []  -> [| Text.empty |]
+    [] -> [|Text.empty|]
     [x] -> toExp x
-    xs  -> appE [|Text.concat|] $ listE $ map toExp xs
-  where toExp = contentExp (fromIntegral indent)
+    xs -> appE [|Text.concat|] $ listE $ map toExp xs
+  where
+    toExp = contentExp (fromIntegral indent)
 
 contentExp :: Integer -> Parsing.LineContent -> Q Exp
 contentExp _ (Parsing.LineContentText text) = appE [|Text.pack|] (stringE text)
