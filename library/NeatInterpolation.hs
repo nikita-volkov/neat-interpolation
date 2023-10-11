@@ -87,6 +87,7 @@ import qualified NeatInterpolation.Parsing as Parsing
 import NeatInterpolation.Prelude
 import qualified NeatInterpolation.String as String
 
+expQQ :: (String -> Q Exp) -> QuasiQuoter
 expQQ quoteExp = QuasiQuoter quoteExp notSupported notSupported notSupported
   where
     notSupported _ = fail "Quotation in this context is not supported"

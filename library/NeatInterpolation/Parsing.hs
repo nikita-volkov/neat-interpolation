@@ -1,8 +1,8 @@
 module NeatInterpolation.Parsing where
 
-import Data.Text (Text, pack)
+import Data.Text (pack)
 import NeatInterpolation.Prelude hiding (many, some, try, (<|>))
-import Text.Megaparsec hiding (Line)
+import Text.Megaparsec
 import Text.Megaparsec.Char
 
 data Line = Line {lineIndent :: Int, lineContents :: [LineContent]}
