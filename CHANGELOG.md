@@ -1,3 +1,7 @@
+## Version 0.5.2
+
+- Support GHC 9.8.
+
 ## Version 0.5
 
 - Isolated the `trimming` and `untrimming` variations of quasi-quoter.
