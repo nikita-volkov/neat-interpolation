@@ -1,6 +1,6 @@
 cabal-version:      3.0
 name:               neat-interpolation
-version:            0.5.1.3
+version:            0.5.1.4
 synopsis:
   Quasiquoter for neat and simple multiline text interpolation
 
